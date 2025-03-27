@@ -1,14 +1,11 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
+const isDev = process.env.NODE_ENV !== 'production';
 
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    title: 'Desktop Locket',
     width: 800,
     height: 600,
     webPreferences: {
@@ -16,11 +13,14 @@ const createWindow = () => {
     },
   });
 
-  // and load the index.html of the app.
+  // Open Dev tools if in dev environment 
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+  
+  // Load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
